@@ -1330,7 +1330,23 @@ Qed.
 Theorem andb_true_elim2 : forall b c : bool,
   andb b c = true -> c = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros b c. intros H. destruct b eqn:Eb.
+  { destruct c eqn:Ec.
+    { reflexivity. }
+    { 
+      rewrite <- H.
+      reflexivity. 
+    }
+  }
+  { destruct c eqn:Ec.
+    { reflexivity. }
+    { 
+      rewrite <- H.
+      reflexivity.
+    }
+
+  }
+Qed.
 (** [] *)
 
 (** Before closing the chapter, let's mention one final
@@ -1371,7 +1387,9 @@ Qed.
 Theorem zero_nbeq_plus_1 : forall n : nat,
   0 =? (n + 1) = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros [|n].
+  - reflexivity.
+  - reflexivity. Qed.
 (** [] *)
 
 (* ================================================================= *)
@@ -1929,11 +1947,20 @@ Inductive bin : Type :=
     for binary numbers, and a function [bin_to_nat] to convert
     binary numbers to unary numbers. *)
 
-Fixpoint incr (m:bin) : bin
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Fixpoint incr (m:bin) : bin := 
+  match m with 
+  | Z => B1 Z
+  | B0 n => B1 n
+  | B1 n => B0 (incr n)
 
-Fixpoint bin_to_nat (m:bin) : nat
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+  end.
+
+Fixpoint bin_to_nat (m:bin) : nat :=
+  match m with
+  | Z => O
+  | B0 n => (bin_to_nat n) + (bin_to_nat n)
+  | B1 n => (S (bin_to_nat n)) + (bin_to_nat n)
+  end.
 
 (** The following "unit tests" of your increment and binary-to-unary
     functions should pass after you have defined those functions correctly.
