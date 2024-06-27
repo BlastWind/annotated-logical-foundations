@@ -23,6 +23,7 @@ From LF Require Export Poly.
     _exactly_ the same as some hypothesis in the context or some
     previously proved lemma. *)
 
+(* P -> P can be done with a direct apply. *)
 Theorem silly1 : forall (n m : nat),
   n = m ->
   n = m.
@@ -42,6 +43,7 @@ Proof.
 
     [apply] also works with _conditional_ hypotheses: *)
 
+(* P -> (P -> Q) -> Q. Applying (P -> Q) will transform goal Q into P. *)
 Theorem silly2 : forall (n m o p : nat),
   n = m ->
   (n = m -> [n;o] = [m;p]) ->
@@ -60,6 +62,7 @@ Proof.
     universal variable [q] in [eq2] gets instantiated with [n], and
     [r] gets instantiated with [m]. *)
 
+(* This theorem is essentially in the format: P -> (P -> Q) -> Q *)
 Theorem silly2a : forall (n m : nat),
   (n,n) = (m,m)  ->
   (forall (q r : nat), (q,q) = (r,r) -> [q] = [r]) ->
@@ -71,13 +74,18 @@ Proof.
 (** **** Exercise: 2 stars, standard, optional (silly_ex)
 
     Complete the following proof using only [intros] and [apply]. *)
+
+(* Form: (A -> B) -> (B -> C) -> A -> C *)
 Theorem silly_ex : forall p,
   (forall n, even n = true -> even (S n) = false) ->
   (forall n, even n = false -> odd n = true) ->
   even p = true ->
   odd (S p) = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros p eq1 eq2 eq3.
+  apply eq2.
+  apply eq1.
+  apply eq3. Qed.
 (** [] *)
 
 (** To use the [apply] tactic, the (conclusion of the) fact
@@ -108,11 +116,17 @@ Proof.
     that theorem as part of your (relatively short) solution to this
     exercise. You do not need [induction]. *)
 
+Search rev.
+
 Theorem rev_exercise1 : forall (l l' : list nat),
   l = rev l' ->
   l' = rev l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros l l' eq1.
+  rewrite -> eq1.
+  symmetry.
+  apply rev_involutive.
+Qed.
 (** [] *)
 
 (** **** Exercise: 1 star, standard, optional (apply_rewrite)
@@ -121,9 +135,14 @@ Proof.
     [rewrite].  What are the situations where both can usefully be
     applied? *)
 
-(* FILL IN HERE
+    (* [apply] can transform goals that goes beyond equational reasoning
+    For example. transforming Q given (P -> Q) to P is not trivial with 
+    equational reasoning.
 
-    [] *)
+    When the goal and the theorem at hand are the same. I.e., P -> P where P is the
+    goal, then [apply] and [rewrite] are the same.
+     *)
+
 
 (* ################################################################# *)
 (** * The [apply with] Tactic *)
@@ -195,7 +214,13 @@ Example trans_eq_exercise : forall (n m o p : nat),
      (n + p) = m ->
      (n + p) = (minustwo o).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n m o p eq1 eq2.
+  symmetry in eq1. 
+  symmetry in eq2.
+  symmetry.
+  transitivity m.
+  apply eq1. apply eq2. Qed.
+
 (** [] *)
 
 (* ################################################################# *)
@@ -282,7 +307,12 @@ Example injection_ex3 : forall (X : Type) (x y z : X) (l j : list X),
   j = z :: l ->
   x = y.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X x y z l j eq1 eq2.
+  injection eq1 as H G.
+  rewrite eq2 in G.
+  injection G as G.
+  transitivity z. apply H. symmetry in G. apply G.
+  Qed.
 (** [] *)
 
 (** So much for injectivity of constructors.  What about disjointness? *)
@@ -332,7 +362,7 @@ Example discriminate_ex3 :
     x :: y :: l = [] ->
     x = z.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X x y z l j contra. discriminate contra. Qed.
 (** [] *)
 
 (** For a more useful example, we can use [discriminate] to make a
@@ -646,7 +676,13 @@ Proof.
 Theorem eqb_true : forall n m,
   n =? m = true -> n = m.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n. induction n.
+  - destruct m.
+    + simpl. reflexivity.
+    + simpl. discriminate.
+  - destruct m.
+    + simpl. discriminate.
+    + intros H. simpl in H. apply IHn in H. rewrite -> H. reflexivity.
 (** [] *)
 
 (** **** Exercise: 2 stars, advanced (eqb_true_informal)
@@ -665,12 +701,19 @@ Definition manual_grade_for_informal_proof : option (nat*string) := None.
 
     In addition to being careful about how you use [intros], practice
     using "in" variants in this proof.  (Hint: use [plus_n_Sm].) *)
+
+
 Theorem plus_n_n_injective : forall n m,
   n + n = m + m ->
   n = m.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros n. induction n.
+  - intros m H. destruct m.
+    + reflexivity.
+    + discriminate.
+  - intros m H. destruct m.
+    + discriminate.
+    + simpl in H. rewrite <- plus_n_Sm in H. rewrite <- plus_n_Sm in H. injection H as H1. apply IHn in H1. rewrite H1. reflexivity.
 
 (** The strategy of doing fewer [intros] before an [induction] to
     obtain a more general IH doesn't always work; sometimes some
@@ -726,7 +769,7 @@ Proof.
   - (* m = S m' *) intros n eq. destruct n as [| n'] eqn:E.
     + (* n = O *) discriminate eq.
     + (* n = S n' *) f_equal.
-      apply IHm'. injection eq as goal. apply goal. Qed.
+      apply IHm'. simpl in eq. injection eq as goal. apply goal. Qed.
 
 (** Let's look at an informal proof of this theorem.  Note that
     the proposition we prove by induction leaves [n] quantified,
@@ -776,6 +819,15 @@ Theorem nth_error_after_last: forall (n : nat) (X : Type) (l : list X),
   length l = n ->
   nth_error l n = None.
 Proof.
+  intros n X l H.
+  generalize dependent n.
+  induction l.
+  - reflexivity.
+  - simpl. destruct n.
+    + discriminate.
+    + intros H. injection H as H1. apply IHl in H1. apply H1.
+Qed. 
+
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
@@ -964,6 +1016,11 @@ Theorem combine_split : forall X Y (l : list (X * Y)) l1 l2,
   split l = (l1, l2) ->
   combine l1 l2 = l.
 Proof.
+  intros X Y l l1 l2 splitH.
+  induction l as [|x' l' IHl'].
+  - simpl in splitH. injection splitH as splitH1 splitH2. rewrite <- splitH1. rewrite <- splitH2. simpl. reflexivity.
+  - unfold split in splitH.
+  
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
