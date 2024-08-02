@@ -1943,6 +1943,23 @@ Inductive bin : Type :=
   | B0 (n : bin)
   | B1 (n : bin).
 
+(* Example of parameterized inductive type: `list` *)
+Inductive list (A : Type) : Type :=
+  | nil : list A
+  | cons : A -> list A -> list A.
+
+(* Example of Indexed Type: `vec`. Note, a value is in type! *)
+Inductive vec (A : Type) : nat -> Type :=
+  | vnil : vec A 0
+  | vcons : forall (n : nat), A -> vec A n -> vec A (S n).
+Arguments vnil {A}.
+Arguments vcons {A n} _ _.
+
+Fixpoint vec_map {A B : Type} {n : nat} (f : A -> B) (v : vec A n) : vec B n :=
+  match v with
+  | vnil => vnil
+  | vcons x xs => vcons (f x) (vec_map f xs)
+  end.
 (** Complete the definitions below of an increment function [incr]
     for binary numbers, and a function [bin_to_nat] to convert
     binary numbers to unary numbers. *)
@@ -1989,6 +2006,25 @@ Example test_bin_incr6 :
 (* FILL IN HERE *) Admitted.
 
 (** [] *)
+
+
+Theorem zero_mult_left: forall p: nat, 0 * p = 0.
+Proof. intros p. unfold mult. reflexivity. Qed.
+
+Theorem zero_mult_right: forall p: nat, p * 0 = 0.
+(* Proof.
+  intros p.
+  simpl.
+  unfold mult.
+  reflexivity.
+  Qed. *)
+
+Proof. 
+  intros p.  
+  destruct p as [| p'] eqn:E.
+  + reflexivity.
+  + unfold mult. reflexivity.
+  Qed.
 
 (* ################################################################# *)
 (** * Testing Your Solutions *)

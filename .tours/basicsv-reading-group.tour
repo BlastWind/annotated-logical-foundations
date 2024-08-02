@@ -1,0 +1,31 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Basics.v Reading Group",
+  "steps": [
+    {
+      "file": "Basics.v",
+      "description": "Peano Axiom?! See items 6-8 in Peano Axiom on its wikipedia [page](https://omni.wikiwand.com/en/articles/Peano_axioms)",
+      "line": 584
+    },
+    {
+      "file": "Basics.v",
+      "description": "First `Theorem`.",
+      "line": 933
+    },
+    {
+      "file": "Basics.v",
+      "description": "`0 * p = 0` comes almost free, but why doesn't `p * 0 = 0`?\n\nExplore this:\n1. Examine def of `*` (`mult`)\n2. Try unfolding `mult`",
+      "line": 1996
+    },
+    {
+      "file": "Induction.v",
+      "description": "`p * 0 = 0` proof doesn't come until `Induction.v`.",
+      "line": 203
+    },
+    {
+      "file": "Basics.v",
+      "description": "Both `bin` and `nat` are \"simple inductive types\" (see Coq's reference on [`Inductive`](https://coq.inria.fr/doc/master/refman/language/core/inductive.html)). Other more powerful inductive types exist —\n\n`list` is a \"parameterized inductive type\"\n\n`vec` is an \"indexed inductive type\"",
+      "line": 1940
+    }
+  ]
+}
