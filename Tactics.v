@@ -683,6 +683,7 @@ Proof.
   - destruct m.
     + simpl. discriminate.
     + intros H. simpl in H. apply IHn in H. rewrite -> H. reflexivity.
+Qed.
 (** [] *)
 
 (** **** Exercise: 2 stars, advanced (eqb_true_informal)
@@ -1009,6 +1010,12 @@ Fixpoint split {X Y : Type} (l : list (X*Y))
       end
   end.
 
+Theorem tail_eq: forall (X: Type) (h: X) (l1 l2: list X),
+    l1 = l2 -> h :: l1 = h :: l2.
+Proof.
+  intros. apply f_equal. apply H.
+Qed.
+
 (** Prove that [split] and [combine] are inverses in the following
     sense: *)
 
@@ -1016,12 +1023,23 @@ Theorem combine_split : forall X Y (l : list (X * Y)) l1 l2,
   split l = (l1, l2) ->
   combine l1 l2 = l.
 Proof.
-  intros X Y l l1 l2 splitH.
-  induction l as [|x' l' IHl'].
-  - simpl in splitH. injection splitH as splitH1 splitH2. rewrite <- splitH1. rewrite <- splitH2. simpl. reflexivity.
-  - unfold split in splitH.
-  
-  (* FILL IN HERE *) Admitted.
+  intros X Y l.
+  induction l as [| h t IH].
+  - intros.
+    inversion H.
+    reflexivity.
+  - intros.
+    destruct h.
+    simpl in H.
+    destruct (split t).
+    inversion H.
+    simpl.
+    apply tail_eq.
+    apply IH.
+    reflexivity.
+Qed.
+
+
 (** [] *)
 
 (** The [eqn:] part of the [destruct] tactic is optional; although
@@ -1075,16 +1093,16 @@ Proof.
   intros n eq. unfold sillyfun1 in eq.
   destruct (n =? 3) eqn:Heqe3.
   (** Now we have the same state as at the point where we got
-      stuck above, except that the context contains an extra
-      equality assumption, which is exactly what we need to
-      make progress. *)
+     stuck above, except that the context contains an extra
+     equality assumption, which is exactly what we need to
+     make progress. *)
     - (* e3 = true *) apply eqb_true in Heqe3.
       rewrite -> Heqe3. reflexivity.
     - (* e3 = false *)
      (** When we come to the second equality test in the body
-         of the function we are reasoning about, we can use
-         [eqn:] again in the same way, allowing us to finish the
-         proof. *)
+        of the function we are reasoning about, we can use
+        [eqn:] again in the same way, allowing us to finish the
+        proof. *)
       destruct (n =? 5) eqn:Heqe5.
         + (* e5 = true *)
           apply eqb_true in Heqe5.
@@ -1096,7 +1114,19 @@ Theorem bool_fn_applied_thrice :
   forall (f : bool -> bool) (b : bool),
   f (f (f b)) = f b.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros f b.
+  destruct b.
+  - destruct (f true) eqn:eq1.
+    + rewrite -> eq1. apply eq1.
+    + destruct (f false) eqn:eq2.
+      { apply eq1. }
+      { apply eq2. }
+  - destruct (f false) eqn:eq1.
+    + destruct (f true) eqn:eq2.
+      { apply eq2. }
+      { apply eq1. }
+    + rewrite -> eq1. apply eq1.
+Qed.
 (** [] *)
 
 (* ################################################################# *)

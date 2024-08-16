@@ -15,7 +15,7 @@
     {
       "file": "Basics.v",
       "description": "`0 * p = 0` comes almost free, but why doesn't `p * 0 = 0`?\n\nExplore this:\n1. Examine def of `*` (`mult`)\n2. Try unfolding `mult`",
-      "line": 1996
+      "line": 2010
     },
     {
       "file": "Induction.v",
