@@ -1,0 +1,46 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "induction reading group pt.1",
+  "steps": [
+    {
+      "file": "Induction.v",
+      "description": "### Intro to Induction\n\nWhy doesn't `simpl \"n + 0 = n\"` simplify?",
+      "line": 118
+    },
+    {
+      "file": "Induction.v",
+      "description": "We are stuck again because `n'` is still a `nat`, and we can't say anything more.",
+      "line": 133
+    },
+    {
+      "file": "Induction.v",
+      "description": "Finally, prove `add_0_r` with induction.",
+      "line": 164
+    },
+    {
+      "file": "Induction.v",
+      "description": "Another property we want to prove for all `nat`. Could destruct work?",
+      "line": 185
+    },
+    {
+      "file": "Induction.v",
+      "description": "Work through 2 examples.",
+      "line": 233
+    },
+    {
+      "file": "Induction.v",
+      "description": "### Local Lemmas\nwith `assert`!",
+      "line": 311
+    },
+    {
+      "file": "Induction.v",
+      "description": "### Informal Proofs (Well commented proofs)\n\n> Proofs must be written for people to read, and only incidentally for coq to execute.",
+      "line": 485
+    },
+    {
+      "file": "Induction.v",
+      "description": "Stop here.",
+      "line": 544
+    }
+  ]
+}

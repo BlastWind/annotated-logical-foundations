@@ -158,9 +158,10 @@ Abort.
 
 Theorem add_0_r : forall n:nat, n + 0 = n.
 Proof.
-  intros n. induction n as [| n' IHn'].
-  - (* n = 0 *)    reflexivity.
-  - (* n = S n' *) simpl. rewrite -> IHn'. reflexivity.  Qed.
+  intros n. induction n as [| k IHk].
+  - reflexivity.
+  - simpl. rewrite IHk. reflexivity.
+Qed.
 
 (** Like [destruct], the [induction] tactic takes an [as...]
     clause that specifies the names of the variables to be introduced
@@ -184,12 +185,10 @@ Proof.
 Theorem minus_n_n : forall n,
   minus n n = 0.
 Proof.
-  (* WORKED IN CLASS *)
-  intros n. induction n as [| n' IHn'].
-  - (* n = 0 *)
-    simpl. reflexivity.
-  - (* n = S n' *)
-    simpl. rewrite -> IHn'. reflexivity.  Qed.
+  intros n. induction n as [| k IHk].
+  - reflexivity.
+  - simpl. rewrite IHk. reflexivity.
+
 
 (** (The use of the [intros] tactic in these proofs is actually
     redundant.  When applied to a goal that contains quantified
@@ -212,27 +211,28 @@ Qed.
 Theorem plus_n_Sm : forall n m : nat,
   S (n + m) = n + (S m).
 Proof.
-  intros n m . induction n as [| n' IHn'].
-  - reflexivity.
-  - simpl. rewrite IHn'. reflexivity.
+  intros n m. induction n as [| k IHk].
+  - simpl. reflexivity.
+  - simpl. rewrite <- IHk. reflexivity.
 Qed.
 
 
 Theorem add_comm : forall n m : nat,
   n + m = m + n.
 Proof.
-  intros n m. induction n as [| n' IHn'].
-  - rewrite -> add_0_r. reflexivity.
-  - simpl. rewrite <- plus_n_Sm. rewrite IHn'. reflexivity.
+  intros n m. induction m as [| k IHk].
+  - simpl. rewrite add_0_r. reflexivity.
+  - simpl. rewrite <- IHk. rewrite plus_n_Sm. reflexivity.
 Qed.
 
 Theorem add_assoc : forall n m p : nat,
   n + (m + p) = (n + m) + p.
 Proof.
-  intros n m p. induction n as [| n' IHn'].
-  - reflexivity.
-  - rewrite <- plus_1_l. simpl. rewrite IHn'. reflexivity.
-Qed.
+  intros n m p. induction n as [| k IHk].
+  - simpl. reflexivity.
+  - simpl. rewrite <- IHk. reflexivity.
+
+
 (** [] *)
 
 (** **** Exercise: 2 stars, standard (double_plus)

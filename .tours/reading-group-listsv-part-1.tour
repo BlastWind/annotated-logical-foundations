@@ -1,0 +1,26 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "reading group Lists.v part 1",
+  "steps": [
+    {
+      "file": "Lists.v",
+      "description": "Key definition!",
+      "line": 150
+    },
+    {
+      "file": "Lists.v",
+      "description": "Quick tip: `tl`, or `tail`, is everything excluding the head.",
+      "line": 272
+    },
+    {
+      "file": "Lists.v",
+      "description": "Let's look rigorously at what the `induction` tactic do.",
+      "line": 632
+    },
+    {
+      "file": "Basics.v",
+      "description": "Misleading, this is enumerative but not really inductive.",
+      "line": 71
+    }
+  ]
+}

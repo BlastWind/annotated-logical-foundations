@@ -926,9 +926,9 @@ Lemma nonzeros_app : forall l1 l2 : natlist,
 Proof.
   intros l1 l2. induction l1 as [| n l' IHl'].
   - simpl. reflexivity. 
-  - simpl. destruct n as [| n'].
-    + rewrite IHl'. reflexivity.
-    + simpl. rewrite IHl'. reflexivity.
+  - simpl. rewrite IHl'. destruct n as [| n'].
+    + reflexivity.
+    + reflexivity.
 Qed.
 (** [] *)
 
@@ -1037,12 +1037,9 @@ Qed.
 Theorem involution_injective : forall (f : nat -> nat),
     (forall n : nat, n = f (f n)) -> (forall n1 n2 : nat, f n1 = f n2 -> n1 = n2).
 Proof.
-  intros f H1.
-  intros n1 n2 H2.
-  rewrite H1.
-  rewrite <- H2.
-  rewrite <- H1.
-  reflexivity.
+  intros f H1 n1 n2 H2.
+  rewrite (H1 n1). rewrite (H1 n2).
+  
 Qed. 
 (** [] *)
 
