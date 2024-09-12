@@ -1,0 +1,46 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Poly.v reading group",
+  "steps": [
+    {
+      "file": "Poly.v",
+      "description": "`list` is polymorphic. We make it polymorphic by introducing the generic, `X: Type`, between `list` and `:=`.\n\n`X` lives in type land. It has kind `*`.\n\n`list`, which is an inductive type, of course lives in type land as well. It has kind `* -> *`.",
+      "line": 44
+    },
+    {
+      "file": "Poly.v",
+      "description": "Conversely, we would say that `l` lives in value land. It has type `list X`.",
+      "line": 46
+    },
+    {
+      "file": "Poly.v",
+      "description": "All interfacing functions gotta be made polymorphic now as well though.",
+      "line": 114
+    },
+    {
+      "file": "Poly.v",
+      "description": "Unergonomic. Do we really need to specify `X` again? Can type inferencing help?",
+      "line": 116
+    },
+    {
+      "file": "Poly.v",
+      "description": "Yes. We can specify the arguments to functions we should treat as implicit (i.e., no need to specify).",
+      "line": 259
+    },
+    {
+      "file": "Poly.v",
+      "description": "Or, inline this implicit specification with curly braces.",
+      "line": 272
+    },
+    {
+      "file": "Poly.v",
+      "description": "Exercise #1: Let's write `split` from scratch.",
+      "line": 520
+    },
+    {
+      "file": "Poly.v",
+      "description": "Exercise 2: Let's delete `map` and write it from scratch.",
+      "line": 756
+    }
+  ]
+}

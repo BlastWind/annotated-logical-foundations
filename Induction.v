@@ -189,7 +189,7 @@ Proof.
   - reflexivity.
   - simpl. rewrite IHk. reflexivity.
 
-
+Qed.
 (** (The use of the [intros] tactic in these proofs is actually
     redundant.  When applied to a goal that contains quantified
     variables, the [induction] tactic will automatically move them
@@ -231,7 +231,7 @@ Proof.
   intros n m p. induction n as [| k IHk].
   - simpl. reflexivity.
   - simpl. rewrite <- IHk. reflexivity.
-
+Qed.
 
 (** [] *)
 
