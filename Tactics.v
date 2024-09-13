@@ -83,9 +83,10 @@ Theorem silly_ex : forall p,
   odd (S p) = true.
 Proof.
   intros p eq1 eq2 eq3.
-  apply eq2.
-  apply eq1.
-  apply eq3. Qed.
+  apply eq2. (* Applying (B -> C) to C here, so we get B. *)
+  apply eq1. (* Applying (A -> B) to B here, so we get A. *)
+  apply eq3. (* Applying A to A here, so we are done. *)
+Qed.
 (** [] *)
 
 (** To use the [apply] tactic, the (conclusion of the) fact
