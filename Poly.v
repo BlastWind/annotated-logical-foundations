@@ -1183,13 +1183,13 @@ Definition scc (n : cnat) : cnat :=
 
 
 Example scc_1 : scc zero = one.
-Proof. reflexivity.
+Proof. reflexivity. Qed.
 
 Example scc_2 : scc one = two.
-Proof. reflexivity.
+Proof. reflexivity. Qed.
 
 Example scc_3 : scc two = three.
-Proof. reflexivity.
+Proof. reflexivity. Qed.
 
 (** [] *)
 
@@ -1207,15 +1207,12 @@ Definition plus (n m : cnat) : cnat :=
   fun (X: Type) (succ: X -> X) (x: X) => m X succ (n X succ x).
 
 Example plus_1 : plus zero one = one.
-Proof. reflexivity.
-
+Proof. reflexivity. Qed.
 Example plus_2 : plus two three = plus three two.
-Proof. reflexivity.
-
+Proof. reflexivity. Qed.
 Example plus_3 :
   plus (plus two two) three = plus one (plus three three).
-Proof. reflexivity.
-
+Proof. reflexivity. Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (church_mult) *)
@@ -1236,14 +1233,11 @@ Definition mult (n m : cnat) : cnat :=
   fun (X:Type) (succ: X -> X) (x: X) => m X (n X succ) x.
 
 Example mult_1 : mult one one = one.
-Proof. reflexivity.
-
+Proof. reflexivity. Qed.
 Example mult_2 : mult zero (plus three three) = zero.
-Proof. reflexivity.
-
+Proof. reflexivity. Qed.
 Example mult_3 : mult two three = plus three three.
-Proof. reflexivity.
-
+Proof. reflexivity. Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (church_exp) *)
@@ -1261,14 +1255,11 @@ Definition exp (n m : cnat) : cnat :=
   fun (X: Type) (succ : X -> X) (x: X) => (m (X -> X) (n X) succ) x.
 
 Example exp_1 : exp two two = plus two two.
-Proof. reflexivity.
-
+Proof. reflexivity. Qed.
 Example exp_2 : exp three zero = one.
-Proof. reflexivity.
-
+Proof. reflexivity. Qed.
 Example exp_3 : exp three two = plus (mult two (mult two two)) one.
-Proof. reflexivity.
-
+Proof. reflexivity. Qed.
 (* Key observation: What if we compose cnats? *)
 (* They are composable. Recall, (X -> X) -> X -> X is sugar for (X -> X) -> (X -> X).
 Applying (X -> X) -> (X -> X) on a (X' -> X') -> (X' -> X') pairs up X' with (X -> X)
@@ -1288,12 +1279,10 @@ Local Open Scope program_scope.
 
 (* `three S` gives 3 S's, no biggie. *)
 Example ex1 : three S = fun z => S(S(S(z))).
-Proof. reflexivity.
-
+Proof. reflexivity. Qed.
 (* Composing two `three`s gives 9. Interesting. 3^2 = 9. *)
 Example ex2 :  (three ∘ three) S = fun z => S(S(S(S(S(S(S(S(S(z))))))))).
-Proof. reflexivity.
-
+Proof. reflexivity. Qed.
 (* Try beta-reducing `three ∘ three`, you should get
   fun z => 
   ((fun f z => f(f(f(z)))
@@ -1304,8 +1293,7 @@ Proof. reflexivity.
 
 (* 3^3 = 27. *)
 Example ex3 : (three ∘ three ∘ three) S = fun z => S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(z))))))))))))))))))))))))))).
-Proof. reflexivity.
-
+Proof. reflexivity. Qed.
 (* From these, can you infer the definition of `exp`? *)
 
 (* The key:
