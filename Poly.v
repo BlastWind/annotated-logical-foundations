@@ -517,10 +517,10 @@ Fixpoint combine {X Y : Type} (lx : list X) (ly : list Y)
     Fill in the definition of [split] below.  Make sure it passes the
     given unit test. *)
 
-Fixpoint split {X Y : Type} (l : list (X*Y)) : (list X) * (list Y) :=
+Fixpoint split {X Y: Type} (l: list (X*Y)) : list X * list Y :=
   match l with 
-  | nil => (nil, nil)
-  | (x,y) :: xys => (x :: fst (split xys), y :: snd (split xys))
+  | [] => ([], [])
+  | (x, y) :: l' => (x :: fst (split l'), y :: snd (split l'))
   end.
 
 Example test_split:
@@ -753,10 +753,10 @@ Proof. reflexivity. Qed.
 
 (** Another handy higher-order function is called [map]. *)
 
-Fixpoint map {X Y : Type} (f : X->Y) (l : list X) : list Y :=
-  match l with
-  | []     => []
-  | h :: t => (f h) :: (map f t)
+Fixpoint map {X Y: Type} (f: X -> Y) (l: list X) : list Y :=
+  match l with 
+  | [] => []
+  | b :: l' => f b :: map f l' 
   end.
 
 (** It takes a function [f] and a list [ l = [n1, n2, n3, ...] ]
@@ -1177,17 +1177,19 @@ Proof. reflexivity. Qed.
     => f^n x] as input, [scc] should produce [fun X f x => f^(n+1) x] as
     output. In other words, do it [n] times, then do it once more. *)
 
-Definition scc (n : cnat) : cnat
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+
+Definition scc (n : cnat) : cnat :=
+  fun (X: Type) (succ: X -> X) (x: X) => succ (n X succ x).
+
 
 Example scc_1 : scc zero = one.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity.
 
 Example scc_2 : scc one = two.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity.
 
 Example scc_3 : scc two = three.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity.
 
 (** [] *)
 
@@ -1201,18 +1203,18 @@ Proof. (* FILL IN HERE *) Admitted.
     Hint: the "zero" argument to a Church numeral need not be just
     [x]. *)
 
-Definition plus (n m : cnat) : cnat
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition plus (n m : cnat) : cnat :=
+  fun (X: Type) (succ: X -> X) (x: X) => m X succ (n X succ x).
 
 Example plus_1 : plus zero one = one.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity.
 
 Example plus_2 : plus two three = plus three two.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity.
 
 Example plus_3 :
   plus (plus two two) three = plus one (plus three three).
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity.
 
 (** [] *)
 
@@ -1230,17 +1232,17 @@ Proof. (* FILL IN HERE *) Admitted.
     which a type contains itself. So leave the type argument
     unchanged. *)
 
-Definition mult (n m : cnat) : cnat
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition mult (n m : cnat) : cnat :=
+  fun (X:Type) (succ: X -> X) (x: X) => m X (n X succ) x.
 
 Example mult_1 : mult one one = one.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity.
 
 Example mult_2 : mult zero (plus three three) = zero.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity.
 
 Example mult_3 : mult two three = plus three three.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity.
 
 (** [] *)
 
@@ -1255,19 +1257,67 @@ Proof. (* FILL IN HERE *) Admitted.
     But again, you cannot pass [cnat] itself as the type argument.
     Finding the right type can be tricky. *)
 
-Definition exp (n m : cnat) : cnat
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition exp (n m : cnat) : cnat :=
+  fun (X: Type) (succ : X -> X) (x: X) => (m (X -> X) (n X) succ) x.
 
 Example exp_1 : exp two two = plus two two.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity.
 
 Example exp_2 : exp three zero = one.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity.
 
 Example exp_3 : exp three two = plus (mult two (mult two two)) one.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. reflexivity.
 
-(** [] *)
+(* Key observation: What if we compose cnats? *)
+(* They are composable. Recall, (X -> X) -> X -> X is sugar for (X -> X) -> (X -> X).
+Applying (X -> X) -> (X -> X) on a (X' -> X') -> (X' -> X') pairs up X' with (X -> X)
+and gives you back (X -> X) -> (X -> X). A cnat again!  *)
+
+(******************* Prep Work ********************)
+Arguments three {X}.
+Arguments two {X}.
+
+Definition compose {A B C} (g : B -> C) (f : A -> B) :=
+  fun x : A => g (f x).
+
+Notation " g ∘ f " := (compose g f)
+  (at level 40, left associativity) : program_scope.
+Local Open Scope program_scope.
+(******************* Prep Work ********************)
+
+(* `three S` gives 3 S's, no biggie. *)
+Example ex1 : three S = fun z => S(S(S(z))).
+Proof. reflexivity.
+
+(* Composing two `three`s gives 9. Interesting. 3^2 = 9. *)
+Example ex2 :  (three ∘ three) S = fun z => S(S(S(S(S(S(S(S(S(z))))))))).
+Proof. reflexivity.
+
+(* Try beta-reducing `three ∘ three`, you should get
+  fun z => 
+  ((fun f z => f(f(f(z)))
+   ((fun f z => f(f(f(z)))
+     S)))
+  z 
+*)
+
+(* 3^3 = 27. *)
+Example ex3 : (three ∘ three ∘ three) S = fun z => S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(S(z))))))))))))))))))))))))))).
+Proof. reflexivity.
+
+(* From these, can you infer the definition of `exp`? *)
+
+(* The key:
+When you beta-reduce `plus`, you'll see `S` is stacked on one by one.
+         beta-reduce `mult`, you'll see a group of n `S`s is stacked one by one.
+
+`exp` is no longer about stacking `S: X -> X`, but rather about stacking (applying) `n: (X -> X) -> X -> X` itself.
+Well, cnats are closed under composition, so just do:
+*)
+
+Definition exp' (n m: cnat) : cnat := 
+  fun (X:Type) (succ: X -> X) (x: X) => (m (X -> X) (n X) succ) x.
 
 End Church.
 End Exercises.
