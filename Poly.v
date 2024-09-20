@@ -1208,11 +1208,14 @@ Definition plus (n m : cnat) : cnat :=
 
 Example plus_1 : plus zero one = one.
 Proof. reflexivity. Qed.
+
 Example plus_2 : plus two three = plus three two.
 Proof. reflexivity. Qed.
+
 Example plus_3 :
   plus (plus two two) three = plus one (plus three three).
 Proof. reflexivity. Qed.
+
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (church_mult) *)
@@ -1234,10 +1237,13 @@ Definition mult (n m : cnat) : cnat :=
 
 Example mult_1 : mult one one = one.
 Proof. reflexivity. Qed.
+
 Example mult_2 : mult zero (plus three three) = zero.
 Proof. reflexivity. Qed.
+
 Example mult_3 : mult two three = plus three three.
 Proof. reflexivity. Qed.
+
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (church_exp) *)

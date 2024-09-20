@@ -716,7 +716,7 @@ Proof.
   - intros m H. destruct m.
     + discriminate.
     + simpl in H. rewrite <- plus_n_Sm in H. rewrite <- plus_n_Sm in H. injection H as H1. apply IHn in H1. rewrite H1. reflexivity.
-
+Qed.
 (** The strategy of doing fewer [intros] before an [induction] to
     obtain a more general IH doesn't always work; sometimes some
     _rearrangement_ of quantified variables is needed.  Suppose, for
@@ -830,7 +830,6 @@ Proof.
     + intros H. injection H as H1. apply IHl in H1. apply H1.
 Qed. 
 
-  (* FILL IN HERE *) Admitted.
 (** [] *)
 
 (* ################################################################# *)
