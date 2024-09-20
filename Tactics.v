@@ -299,7 +299,7 @@ Proof.
   intros n m o H.
   (* WORKED IN CLASS *)
   injection H as H1 H2.
-  rewrite H1. rewrite H2. reflexivity.
+  transitivity o. apply H1. symmetry. apply H2.
 Qed.
 
 (** **** Exercise: 3 stars, standard (injection_ex3) *)

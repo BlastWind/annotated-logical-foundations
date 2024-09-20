@@ -11,6 +11,31 @@
       "file": "Tactics.v",
       "description": "Pay attention! `apply trans_eq` actually \"generated\" two more goals.\n\nTo make sense of this: We applied `(P -> Q -> R)` to `R`. Rewritingly, this is `(P, Q) -> R`, so two goals, `P`, `Q`. ",
       "line": 190
+    },
+    {
+      "file": "Tactics.v",
+      "description": "`injection` on `x :: y :: l = z :: j` gives us `x = z` and `y :: l = j`.",
+      "line": 312
+    },
+    {
+      "file": "Tactics.v",
+      "description": "`f_equal` is the converse of the \"injectivity of constructors principle\".",
+      "line": 404
+    },
+    {
+      "file": "Tactics.v",
+      "description": "Very interesting. \n\n> Idiomatic use of Coq generally favors backward reasoning\n\nWhy?",
+      "line": 473
+    },
+    {
+      "file": "Tactics.v",
+      "description": "Worth peeling apart.\n\nThis is still `(P -> Q) -> Q`. But, `P` is an implication itself. ",
+      "line": 512
+    },
+    {
+      "file": "Tactics.v",
+      "description": "This might be the first time where we needed to leave a variable universally quantified for a correct proof.\n\nIntroducing `m` right away chooses a specific `m`, and that is not generic enough and screws things up.",
+      "line": 622
     }
   ]
 }
