@@ -1,0 +1,91 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "6. logic",
+  "steps": [
+    {
+      "file": "Logic.v",
+      "description": "`injective` is a property that only applies to certain functions, but there's no problem defining such a (polymorphic) property.\n\nWe can prove specific functions, such as `S`, to be `injective`.",
+      "line": 85
+    },
+    {
+      "file": "Logic.v",
+      "description": "Why is Coq's logical core differ from ZFC?",
+      "line": 1657
+    },
+    {
+      "file": "Logic.v",
+      "description": "Wonderful tool for constructing a math lib, or learning dependencies of maths.",
+      "line": 1747
+    },
+    {
+      "file": "Logic.v",
+      "description": "Nice text that summarizes what `apply` does.",
+      "line": 135
+    },
+    {
+      "file": "Logic.v",
+      "description": "Look at the goal state. This is actually kind of interesting.\n\n`HQ` is a proposition `Q` and is a hypothesis (so it is true). Hence `apply HQ` solves the goal state, which happens to just be `Q`. ",
+      "line": 237
+    },
+    {
+      "file": "Logic.v",
+      "description": "Interesting. While a conjunctive hypothesis gives you two pieces of information to prove goal, a disjunctive hypothesis requires you to prove goal from each of the two pieces. ",
+      "line": 297
+    },
+    {
+      "file": "Logic.v",
+      "description": "Important intuition!\n\n`~P` is defined as `forall Q, P -> Q`!",
+      "line": 363
+    },
+    {
+      "file": "Logic.v",
+      "description": "Destructing a hypothesis: `destruct H`, with `H: A -> B` gives `A` as new goal and invokes `destruct B`.\n\nNote, since `B = false` here, and `destruct False` solves goal, our goal state just becomes `A` (which is `P`).",
+      "line": 408
+    },
+    {
+      "file": "Logic.v",
+      "description": "Reminder: \n\n1.`apply HNA in HP` proceeds in a forward manner. \n2. Backward coq is more idiomatic since we only modify the singular goal state. \n",
+      "line": 456
+    },
+    {
+      "file": "Logic.v",
+      "description": "Makes sense. Just like how `id` is used in Haskell all the time.",
+      "line": 585
+    },
+    {
+      "file": "Logic.v",
+      "description": "Very interesting! So `discrimnate` implements `disc_fn` logic?",
+      "line": 616
+    },
+    {
+      "file": "Logic.v",
+      "description": "I wonder if the code behind `apply` had special code for handling `/\\`.",
+      "line": 654
+    },
+    {
+      "file": "Logic.v",
+      "description": "In propositional calculus, we would construct a truth table. This basically models that.",
+      "line": 709
+    },
+    {
+      "file": "Logic.v",
+      "description": "Had to look up the solution. Both `leb_plus_exists` and `plus_exists_leb` follow the same pattern —\n\nget a `S n` from the inductive case, and a `S m` from the second destruct case. Together, `S n <= S m` is just simplified to `n <= m`, completing our thing.",
+      "line": 857
+    },
+    {
+      "file": "Logic.v",
+      "description": "According to these paragraphs, `In` is an example of a recursively defined proposition but we'll see inductively defined ones later.\n\nInteresting, I always used recursive and inductive interchangeably.",
+      "line": 945
+    },
+    {
+      "file": "Logic.v",
+      "description": "Important intuition!\n\nWhile many props are decidable and can thus be thought of as bools, there are undedicable ones out there.",
+      "line": 1268
+    },
+    {
+      "file": "Logic.v",
+      "description": "How was this done? This deserves very special attention.",
+      "line": 1441
+    }
+  ]
+}

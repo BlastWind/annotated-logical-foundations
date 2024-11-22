@@ -1,6 +1,6 @@
 {
   "$schema": "https://aka.ms/codetour-schema",
-  "title": "tactics",
+  "title": "5. tactics",
   "steps": [
     {
       "file": "Tactics.v",
@@ -36,6 +36,16 @@
       "file": "Tactics.v",
       "description": "This might be the first time where we needed to leave a variable universally quantified for a correct proof.\n\nIntroducing `m` right away chooses a specific `m`, and that is not generic enough and screws things up.",
       "line": 622
+    },
+    {
+      "file": "Tactics.v",
+      "description": "What we instead want is to say:\n\nGiven `forall m. double n' = double m -> n' = m`, we have `forall m. double (S n') = double m -> S n' = m'`.\n\nI.e., given that `double 10 = double m -> 10 = m`, we have `double 11 = double m -> 11 = m`.",
+      "line": 635
+    },
+    {
+      "file": "Tactics.v",
+      "description": "Fun exercise.\n\nKey is to make `n = m` for the hard case, where both `n` and `m` in `S` form.\t\t",
+      "line": 677
     }
   ]
 }

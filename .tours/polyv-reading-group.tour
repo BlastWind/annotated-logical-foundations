@@ -1,6 +1,6 @@
 {
   "$schema": "https://aka.ms/codetour-schema",
-  "title": "Poly.v reading group",
+  "title": "4. Poly.v reading group",
   "steps": [
     {
       "file": "Poly.v",

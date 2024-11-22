@@ -174,10 +174,12 @@ Print ev_4'''.
 
 Theorem ev_8 : ev 8.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  apply ev_SS. apply ev_SS. apply ev_SS. apply ev_SS. apply ev_0.
+Qed.
 
-Definition ev_8' : ev 8
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition ev_8' : ev 8 :=
+  ev_SS 6 (ev_SS 4 (ev_SS 2 (ev_SS 0 ev_0))).
+
 (** [] *)
 
 (* ################################################################# *)
@@ -394,8 +396,17 @@ Definition and_comm' P Q : P /\ Q <-> Q /\ P :=
 
     Construct a proof object for the following proposition. *)
 
-Definition conj_fact : forall P Q R, P /\ Q -> Q /\ R -> P /\ R
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition conj_fact : forall P Q R, P /\ Q -> Q /\ R -> P /\ R :=
+  fun (P Q R: Prop) => 
+    fun (Hpq : P /\ Q) => fun (Hqr: Q /\ R) =>
+      match Hpq with
+      | conj HP HQ =>
+        match Hqr with
+        | conj _ HR =>
+          conj HP HR
+        end
+      end
+.
 (** [] *)
 
 (* ================================================================= *)
@@ -450,9 +461,12 @@ End Or.
 (** **** Exercise: 2 stars, standard (or_commut')
 
     Construct a proof object for the following proposition. *)
-
-Definition or_commut' : forall P Q, P \/ Q -> Q \/ P
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition or_commut' : forall P Q, P \/ Q -> Q \/ P :=
+  fun P Q => fun HPQ => 
+    match HPQ with 
+    | or_introl HP => or_intror HP
+    | or_intror HQ => or_introl HQ
+    end.
 (** [] *)
 
 (* ================================================================= *)
@@ -496,9 +510,9 @@ Definition some_nat_is_even : exists n, ev n :=
 (** **** Exercise: 2 stars, standard (ex_ev_Sn)
 
     Construct a proof object for the following proposition. *)
+Definition ex_ev_Sn : ex (fun n => ev (S n)) :=
+  ex_intro (fun n => ev (S n)) 1 ((ev_SS 0 ev_0)).
 
-Definition ex_ev_Sn : ex (fun n => ev (S n))
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
 (** [] *)
 
 (* ================================================================= *)
@@ -516,8 +530,8 @@ Inductive True : Prop :=
 
     Construct a proof object for the following proposition. *)
 
-Definition p_implies_true : forall P, P -> True
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition p_implies_true : forall P, P -> True := 
+  fun _ _ => I.
 (** [] *)
 
 (** [False] is equally simple -- indeed, so simple it may look
@@ -552,8 +566,8 @@ Definition false_implies_zero_eq_one : False -> 0 = 1 :=
 
     Construct a proof object for the following proposition. *)
 
-Definition ex_falso_quodlibet' : forall P, False -> P
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition ex_falso_quodlibet' : forall P, False -> P :=
+  fun P => fun contra => match contra with end.
 (** [] *)
 
 End Props.
@@ -594,7 +608,6 @@ Notation "x == y" := (eq x y)
     These rules, which are similar to those used by [Compute], include
     evaluation of function application, inlining of definitions, and
     simplification of [match]es.  *)
-
 Lemma four: 2 + 2 == 1 + 3.
 Proof.
   apply eq_refl.
@@ -651,8 +664,14 @@ Qed.
     against the equality hypotheses. *)
 
 Definition eq_cons : forall (X : Type) (h1 h2 : X) (t1 t2 : list X),
-    h1 == h2 -> t1 == t2 -> h1 :: t1 == h2 :: t2
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+    h1 == h2 -> t1 == t2 -> h1 :: t1 == h2 :: t2 :=
+  fun X h1 h2 t1 h2 => fun heq => fun teq => 
+    match heq with 
+    | eq_refl h => (* by pattern matching here, we know that `h1 <-> h` and `h2 <-> h`, with <-> meaning convertible *)
+      match teq with 
+      | eq_refl t => eq_refl (h :: t)
+      end
+    end.
 
 (** [] *)
 
@@ -666,7 +685,9 @@ Definition eq_cons : forall (X : Type) (h1 h2 : X) (t1 t2 : list X),
 Lemma equality__leibniz_equality : forall (X : Type) (x y: X),
   x == y -> forall (P : X -> Prop), P x -> P y.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. destruct H. apply H0. Show Proof.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 2 stars, standard (equality__leibniz_equality_term)
@@ -676,8 +697,13 @@ Proof.
     proof term constructed by tactics in the previous exercise is
     needessly complicated. Hint: pattern-match as soon as possible. *)
 Definition equality__leibniz_equality_term : forall (X : Type) (x y: X),
-    x == y -> forall P : (X -> Prop), P x -> P y
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+    x == y -> forall P : (X -> Prop), P x -> P y :=
+  fun X x y Heq => 
+    match Heq with 
+    | eq_refl x => fun P H => H
+    end.
+
+
 (** [] *)
 
 (** **** Exercise: 3 stars, standard, optional (leibniz_equality__equality)
@@ -690,7 +716,11 @@ Definition equality__leibniz_equality_term : forall (X : Type) (x y: X),
 Lemma leibniz_equality__equality : forall (X : Type) (x y: X),
   (forall P:X->Prop, P x -> P y) -> x == y.
 Proof.
-(* FILL IN HERE *) Admitted.
+  intros.
+  specialize H with (P := (eq x)).
+  apply H.
+  apply eq_refl.
+Qed.
 (** [] *)
 
 End EqualityPlayground.
@@ -823,22 +853,43 @@ Fail Definition falso : False := infinite_loop 0.
     [Logic].  Now construct the proof objects for them
     directly. *)
 
+Print and.
 (** **** Exercise: 2 stars, standard (and_assoc) *)
 Definition and_assoc : forall P Q R : Prop,
-    P /\ (Q /\ R) -> (P /\ Q) /\ R
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
-(** [] *)
+    P /\ (Q /\ R) -> (P /\ Q) /\ R :=
+  fun _ _ _ H1 => 
+    match H1 with
+    | conj HP HQR => 
+      match HQR with 
+      | conj HQ HR => conj (conj HP HQ) HR
+      end
+    end.
 
+Locate "<->".
+Print iff.
+About iff.
 (** **** Exercise: 3 stars, standard (or_distributes_over_and) *)
 Definition or_distributes_over_and : forall P Q R : Prop,
-    P \/ (Q /\ R) <-> (P \/ Q) /\ (P \/ R)
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+    P \/ (Q /\ R) -> (P \/ Q) /\ (P \/ R) :=
+  fun _ _ _ H1 =>
+    match H1 with
+    | or_introl HP =>
+      conj (or_introl HP) (or_introl HP) 
+    | or_intror HQR => 
+      match HQR with
+      | conj HQ HR => conj (or_intror HQ) (or_intror HR)
+      end
+    end.
+
 (** [] *)
 
+Locate "~".
+Check not (not _).
 (** **** Exercise: 3 stars, standard (negations) *)
 Definition double_neg : forall P : Prop,
-    P -> ~~P
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+    P -> ~~P := (* P -> ((P -> False) -> False) *)
+  fun _ H => fun G => G H.
+
 
 Definition contradiction_implies_anything : forall P Q : Prop,
     (P /\ ~P) -> Q
@@ -851,8 +902,9 @@ Definition de_morgan_not_or : forall P Q : Prop,
 
 (** **** Exercise: 2 stars, standard (currying) *)
 Definition curry : forall P Q R : Prop,
-    ((P /\ Q) -> R) -> (P -> (Q -> R))
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+    ((P /\ Q) -> R) -> (P -> (Q -> R)) :=
+  fun P Q R H1 P Q => 
+    H1 (conj P Q).
 
 Definition uncurry : forall P Q R : Prop,
     (P -> (Q -> R)) -> ((P /\ Q) -> R)
@@ -880,11 +932,23 @@ Definition propositional_extensionality : Prop :=
 
     Prove the following consequence of propositional extensionality. *)
 
+Theorem tmp: forall (P Q: Prop), P \/ Q <-> Q \/ P.
+Proof.
+  intros. split.
+  - intros [HP | HQ]. right. apply HP. left. apply HQ.
+  - intros [HP | HQ]. right. apply HP. left. apply HQ.
+Qed.
+
 Theorem pe_implies_or_eq :
   propositional_extensionality ->
   forall (P Q : Prop), (P \/ Q) = (Q \/ P).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros pe P Q.
+  apply pe.
+  apply tmp.
+  Show Proof.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 1 star, advanced (pe_implies_true_eq)
@@ -892,10 +956,12 @@ Proof.
     Prove that if a proposition [P] is provable, then it is equal to
     [True] -- as a consequence of propositional extensionality. *)
 
+Print I.
 Lemma pe_implies_true_eq :
   propositional_extensionality ->
   forall (P : Prop), P -> True = P.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. intros PE P HP. apply PE. split. intros. apply HP. intros. apply I. Qed.
+
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (pe_implies_pi)
@@ -918,7 +984,16 @@ Definition proof_irrelevance : Prop :=
 
 Theorem pe_implies_pi :
   propositional_extensionality -> proof_irrelevance.
-Proof. (* FILL IN HERE *) Admitted.
+Proof.
+  intros PE P pf1 pf2.
+  assert (H: True = P). { apply (pe_implies_true_eq PE). apply pf1. }
+  destruct H.
+  destruct pf1.
+  destruct pf2.
+  reflexivity.
+Qed.
+  
+
 (** [] *)
 
 (* 2023-10-03 16:40 *)

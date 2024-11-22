@@ -1,0 +1,66 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "7. IndProp",
+  "steps": [
+    {
+      "file": "IndProp.v",
+      "description": "One important thing I just realized: The constructor can take in anything. But, the type of the constructors must match the inductive's signature.",
+      "line": 1284
+    },
+    {
+      "file": "IndProp.v",
+      "description": "This part is gold.",
+      "line": 2614
+    },
+    {
+      "file": "IndProp.v",
+      "description": "Great point! Though inductive definition can't contain a \"false case\", can simply supply that in a lemma.",
+      "line": 1575
+    },
+    {
+      "file": "IndProp.v",
+      "description": "This is **really** interesting. Given inductive constructor\n```\nMApp s1 re1 s2 re2\n             (H1 : s1 =~ re1)\n             (H2 : s2 =~ re2)\n           : (s1 ++ s2) =~ (App re1 re2)\n```\nWe can match\n```\n     s1 re1 s2 re2 \n\t         Hmatch1 IH1\n\t\t\t Hmatch2 IH2\n```\nEach hypothesis in the constructor implies a new hypothesis (\"smallest last step\" of the goal).\n",
+      "line": 1649,
+      "selection": {
+        "start": {
+          "line": 1649,
+          "character": 11
+        },
+        "end": {
+          "line": 1649,
+          "character": 48
+        }
+      }
+    },
+    {
+      "file": "IndProp.v",
+      "description": "I wonder if this notion can be represented via the `trans_closure` thing above?",
+      "line": 225
+    },
+    {
+      "file": "IndProp.v",
+      "description": "\"Each constructor's type must have the form `[ev n]`\".\n\nI guess that aids in the understanding of IndProp. The proposition is the same (they have the same form).",
+      "line": 309
+    },
+    {
+      "file": "IndProp.v",
+      "description": "Good conceptualization!",
+      "line": 344
+    },
+    {
+      "file": "IndProp.v",
+      "description": "Had to look up the solution for this one. I forgot the oldest trick: generalizing induction!",
+      "line": 1078
+    },
+    {
+      "file": "IndProp.v",
+      "description": "Difference between Inductive prop and normal Inductives. This is great detail. ",
+      "line": 1387
+    },
+    {
+      "file": "IndProp.v",
+      "description": "> The syntax of inductive definition prevents a \"negative\" rule.",
+      "line": 1490
+    }
+  ]
+}

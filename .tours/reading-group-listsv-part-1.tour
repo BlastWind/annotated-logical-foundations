@@ -1,6 +1,6 @@
 {
   "$schema": "https://aka.ms/codetour-schema",
-  "title": "reading group Lists.v part 1",
+  "title": "3. reading group Lists.v part 1",
   "steps": [
     {
       "file": "Lists.v",

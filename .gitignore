@@ -1,3 +1,11 @@
 *.vo
 *.aux
 *.glob
+*.glob
+*.vok
+*.vos
+*.ml
+*.mli
+.lia.cache
+*.coq
+*.conf

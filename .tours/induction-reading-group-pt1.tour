@@ -1,6 +1,6 @@
 {
   "$schema": "https://aka.ms/codetour-schema",
-  "title": "induction reading group pt.1",
+  "title": "2. induction reading group pt.1",
   "steps": [
     {
       "file": "Induction.v",
